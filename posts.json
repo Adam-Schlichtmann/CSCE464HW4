@@ -1,0 +1,189 @@
+  [{
+    "_id": 0,
+    "author": 0,
+    "content": "What a beautiful day",
+    "date": "2018-010-23T19:25:43.511Z",
+    "favorited": 3,
+    "replies": [],
+    "userMentions": []
+  },
+  {
+    "_id": 1,
+    "author": 0,
+    "content": "Great time with @Nick",
+    "date": "2018-10-23T10:25:43.511Z",
+    "favorited": 3,
+    "replies": [17],
+    "userMentions": [4]
+  },
+  {
+    "_id": 2,
+    "author": 0,
+    "content": "I love the west coast I might stay",
+    "date": "2018-09-24T01:03:43.511Z",
+    "favorited": 1,
+    "replies": [],
+    "userMentions": []
+  },
+  {
+    "_id": 3,
+    "author": 0,
+    "content": "Wish I could go on Vacation",
+    "date": "2018-09-23T18:25:43.511Z",
+    "favorited": 1,
+    "replies": [],
+    "userMentions": []
+  },
+  {
+    "_id": 4,
+    "author": 1,
+    "content": "When is the next concert in Lincoln?",
+    "date": "2018-09-23T18:25:43.511Z",
+    "favorited": 2,
+    "replies": [],
+    "userMentions": []
+  },
+  {
+    "_id": 5,
+    "author": 1,
+    "content": "Wanna go golfing @Ashley?",
+    "date": "2018-09-23T18:25:43.511Z",
+    "favorited": 1,
+    "replies": [],
+    "userMentions": [3]
+  },
+  {
+    "_id": 6,
+    "author": 1,
+    "content": "Did you go to yoga today @Sara?",
+    "date": "2018-09-23T18:25:43.511Z",
+    "favorited": 1,
+    "replies": [],
+    "userMentions": [5]
+  },
+  {
+    "_id": 7,
+    "author": 1,
+    "content": "I would love to, but I got work",
+    "date": "2018-06-25T18:34:43.511Z",
+    "favorited": 2,
+    "replies": [],
+    "userMentions": []
+  },
+  {
+    "_id": 8,
+    "author": 2,
+    "content": "Who is going to the lakes this weekend??",
+    "date": "2018-06-23T16:02:45.511Z",
+    "favorited": 2,
+    "replies": [7],
+    "userMentions": []
+  },
+  {
+    "_id": 9,
+    "author": 2,
+    "content": "A man walks into a bar \"ouch\" he says",
+    "date": "2018-09-23T18:25:43.511Z",
+    "favorited": 0,
+    "replies": [],
+    "userMentions": []
+  },
+  {
+    "_id": 10,
+    "author": 2,
+    "content": "Why did the chicken cross the road?",
+    "date": "2018-09-23T18:25:43.511Z",
+    "favorited": 2,
+    "replies": [],
+    "userMentions": []
+  },
+  {
+    "_id": 11,
+    "author": 2,
+    "content": "Wish @Adam was here right now",
+    "date": "2018-09-23T18:25:43.511Z",
+    "favorited": 1,
+    "replies": [],
+    "userMentions": [0]
+  },
+  {
+    "_id": 12,
+    "author": 3,
+    "content": "Wonder what @Adrian thinks",
+    "date": "2018-09-23T18:25:43.511Z",
+    "favorited": 1,
+    "replies": [],
+    "userMentions": [1]
+  },
+  {
+    "_id": 13,
+    "author": 3,
+    "content": "When can I go to mars",
+    "date": "2018-09-23T18:25:43.511Z",
+    "favorited": 1,
+    "replies": [],
+    "userMentions": []
+  },
+  {
+    "_id": 14,
+    "author": 3,
+    "content": "When do you come back @Adam",
+    "date": "2018-09-23T18:25:43.511Z",
+    "favorited": 2,
+    "replies": [2],
+    "userMentions": [0]
+  },
+  {
+    "_id": 15,
+    "author": 3,
+    "content": "Did you get the DLC yet? @Ben",
+    "date": "2018-09-23T18:25:43.511Z",
+    "favorited": 1,
+    "replies": [],
+    "userMentions": [2]
+  },
+  {
+    "_id": 16,
+    "author": 4,
+    "content": "How about a movie saturday? @Ashley",
+    "date": "2018-11-01T11:25:43.511Z",
+    "favorited": 2,
+    "replies": [],
+    "userMentions": [3]
+  },
+  {
+    "_id": 17,
+    "author": 4,
+    "content": "Lets do it again sometime soon!",
+    "date": "2018-10-23T18:25:43.511Z",
+    "favorited": 2,
+    "replies": [],
+    "userMentions": []
+  },
+  {
+    "_id": 18,
+    "author": 5,
+    "content": "Lets start a new food truck @Ashley",
+    "date": "2018-09-23T18:25:43.511Z",
+    "favorited": 1,
+    "replies": [],
+    "userMentions": [3]
+  },
+  {
+    "_id": 19,
+    "author": 5,
+    "content": "I want a motorcycle",
+    "date": "2018-09-02T18:25:43.511Z",
+    "favorited": 1,
+    "replies": [],
+    "userMentions": []
+  },
+  {
+    "_id": 20,
+    "author": 5,
+    "content": "Who even made this app",
+    "date": "2018-09-19T18:25:43.511Z",
+    "favorited": 0,
+    "replies": [],
+    "userMentions": []
+  }]
