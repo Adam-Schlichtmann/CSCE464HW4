@@ -1,0 +1,38 @@
+[
+  {
+  "_id": 0,
+  "name": "Adam",
+  "following": [1, 2],
+  "favorites": [4, 10, 17]
+  },
+  {
+    "_id": 1,
+    "name": "Adrian",
+    "following": [0, 5],
+    "favorites": [0, 1,3, 8, 10, 17, 19]
+  },
+  {
+    "_id": 2,
+    "name": "Ben",
+    "following": [1, 3, 4],
+    "favorites": [1, 2, 4, 7, 13, 14]
+  },
+  {
+    "_id": 3,
+    "name": "Ashley",
+    "following": [1, 2, 4, 5],
+    "favorites": [7, 8, 16]
+  },
+  {
+    "_id": 4,
+    "name": "Nick",
+    "following": [1, 2, 3, 5],
+    "favorites": [0, 6, 11, 14 ,15, 18]
+  },
+  {
+    "_id": 5,
+    "name": "Sara",
+    "following": [1, 3],
+    "favorites": [1, 5, 12, 16]
+  }
+]
