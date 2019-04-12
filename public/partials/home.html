@@ -6,6 +6,11 @@
 <div ng-app></div>
 <ul>
     <li ng-repeat='post in posts'>
-        {{post.content}}
+        <a href="/#/chirp/{{post._id}}">
+            {{post.content}}
+        </a>
+        <a href="/#/chirp/delete/{{post._id}}">
+            <i class="glyphicon glyphicon-remove"></i>
+        </a>
     </li>
 </ul>

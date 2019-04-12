@@ -15,45 +15,56 @@ router.get('/', function(req, res) {
 
 router.get('/:id', function(req, res) {
     var collection = db.get('posts');
-    collection.findOne({ _id: req.params.id }, function(err, movie){
+    collection.findOne({ _id: req.params.id }, function(err, post){
         if (err) throw err;
 
-      	res.json(movie);
+      	res.json(post);
     });
 });
 
 router.put('/:id', function(req, res){
     var collection = db.get('posts');
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
     collection.update({
         _id: req.params.id
     },
     {
-        title: req.body.title,
-        director: req.body.director,
-        country: req.body.country
-    }, function(err, movie){
+        content: req.body.content,
+        replies: [],
+        date: dateTime,
+        favorited: 0
+    }, function(err, post){
         if (err) throw err;
 
-        res.json(movie);
+        res.json(post);
     });
 });
 
 
 router.delete('/:id', function(req, res){
     var collection = db.get('posts');
-    collection.remove({ _id: req.params.id }, function(err, movie){
+    collection.remove({ _id: req.params.id }, function(err, post){
         if (err) throw err;
 
-        res.json(movie);
+        res.json(post);
     });
 });
 
 router.post('/', function(req, res){
     var collection = db.get('posts');
+    var today = new Date();
+    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+    var dateTime = date+' '+time;
+    console.log(req.body.content);
     collection.insert({
-        title: req.body.title,
-        director: req.body.director,
-        country: req.body.country
+        content: req.body.content,
+        replies: [],
+        date: dateTime,
+        favorited: 0
     }, function(err, movie){
         if (err) throw err;
 

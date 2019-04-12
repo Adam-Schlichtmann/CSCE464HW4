@@ -7,16 +7,16 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'HomeCtrl'
         })
         .when('/add-chirp', {
-            templateUrl: 'partials/movie-form.html',
+            templateUrl: 'partials/post-form.html',
             controller: 'AddChirpCtrl'
         })
         .when('/chirp/:id', {
-            templateUrl: 'partials/movie-form.html',
-            controller: 'EditMovieCtrl'
+            templateUrl: 'partials/update-form.html',
+            controller: 'EditChirpCtrl'
         })
         .when('/chirp/delete/:id', {
-            templateUrl: 'partials/movie-delete.html',
-            controller: 'DeleteMovieCtrl'
+            templateUrl: 'partials/post-delete.html',
+            controller: 'DeleteChirpCtrl'
         })
         .otherwise({
             redirectTo: '/'
@@ -35,8 +35,8 @@ app.controller('HomeCtrl', ['$scope', '$resource',
 app.controller('AddChirpCtrl', ['$scope', '$resource', '$location',
     function($scope, $resource, $location){
         $scope.save = function(){
-            var Movies = $resource('/api/chirps');
-            Movies.save($scope.movie, function(){
+            var Chirp = $resource('/api/posts');
+            Chirp.save($scope.posts, function(){
                 $location.path('/');
             });
         };
@@ -45,16 +45,16 @@ app.controller('AddChirpCtrl', ['$scope', '$resource', '$location',
 
 app.controller('EditChirpCtrl', ['$scope', '$resource', '$location', '$routeParams',
     function($scope, $resource, $location, $routeParams){	
-        var Movies = $resource('/api/chirps/:id', { id: '@_id' }, {
+        var Chirp = $resource('/api/posts/:id', { id: '@_id' }, {
             update: { method: 'PUT' }
         });
 
-        Movies.get({ id: $routeParams.id }, function(movie){
-            $scope.movie = movie;
+        Chirp.get({ id: $routeParams.id }, function(posts){
+            $scope.posts = posts;
         });
 
         $scope.save = function(){
-            Movies.update($scope.movie, function(){
+            Chirp.update($scope.posts, function(){
                 $location.path('/');
             });
         }
@@ -63,13 +63,13 @@ app.controller('EditChirpCtrl', ['$scope', '$resource', '$location', '$routePara
 
 app.controller('DeleteChirpCtrl', ['$scope', '$resource', '$location', '$routeParams',
     function($scope, $resource, $location, $routeParams){
-        var Movies = $resource('/api/chirps/:id');
-        Movies.get({ id: $routeParams.id }, function(movie){
-            $scope.movie = movie;
+        var Chirp = $resource('/api/posts/:id');
+        Chirp.get({ id: $routeParams.id }, function(post){
+            $scope.post = post;
         })
     
         $scope.delete = function(){
-            Movies.delete({ id: $routeParams.id }, function(movie){
+            Chirp.delete({ id: $routeParams.id }, function(posts){
                 $location.path('/');
             });
         }
