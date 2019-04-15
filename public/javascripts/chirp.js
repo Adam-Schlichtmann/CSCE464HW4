@@ -3,6 +3,14 @@ var app = angular.module('chirpApp', ['ngResource','ngRoute']);
 app.config(['$routeProvider', function($routeProvider){
     $routeProvider
         .when('/', {
+            templateUrl: 'partials/login-form.html',
+            controller: 'loginCtrl'
+        })
+        .when('/register', {
+            templateUrl: 'partials/register-form.html',
+            controller: 'registerCtrl'
+        })
+        .when('/:userName', {
             templateUrl: 'partials/home.html',
             controller: 'HomeCtrl'
         })
@@ -25,8 +33,8 @@ app.config(['$routeProvider', function($routeProvider){
 
 app.controller('HomeCtrl', ['$scope', '$resource', 
     function($scope, $resource){
-        var Chirp = $resource('/api/posts');
-        Chirp.query(function(posts){
+        var User = $resource('/api/users/:userName',  { userName: '@userName' });
+        User.query(function(posts){
             $scope.posts = posts;
     });
 }]);
@@ -42,6 +50,26 @@ app.controller('AddChirpCtrl', ['$scope', '$resource', '$location',
         };
 }]);
 
+app.controller('registerCtrl', ['$scope', '$resource', '$location',
+    function($scope, $resource, $location){
+        $scope.save = function(){
+            var Chirp = $resource('/api/users');
+            Chirp.save($scope.users, function(){
+                $location.path('/');
+            });
+        };
+}]);
+
+app.controller('loginCtrl', ['$scope', '$location', '$resource',
+    function($scope, $location, $resource){
+        var User = $resource('/api/users/:userName',  { userName: '@userName' });
+        $scope.save = function(){
+            User.get( function(user){
+                console.log(user);
+                $location.path('/:userName');
+            });
+    };
+}]);
 
 app.controller('EditChirpCtrl', ['$scope', '$resource', '$location', '$routeParams',
     function($scope, $resource, $location, $routeParams){	
