@@ -10,7 +10,7 @@ app.config(['$routeProvider', function($routeProvider){
             templateUrl: 'partials/register-form.html',
             controller: 'registerCtrl'
         })
-        .when('/:userName', {
+        .when('/', {
             templateUrl: 'partials/home.html',
             controller: 'HomeCtrl'
         })
@@ -33,9 +33,12 @@ app.config(['$routeProvider', function($routeProvider){
 
 app.controller('HomeCtrl', ['$scope', '$resource', 
     function($scope, $resource){
-        var User = $resource('/api/users/:userName',  { userName: '@userName' });
+        var User = $resource('/api/posts');
+        
         User.query(function(posts){
+            console.log(posts);
             $scope.posts = posts;
+
     });
 }]);
 
@@ -45,7 +48,7 @@ app.controller('AddChirpCtrl', ['$scope', '$resource', '$location',
         $scope.save = function(){
             var Chirp = $resource('/api/posts');
             Chirp.save($scope.posts, function(){
-                $location.path('/:userName');
+                $location.path('/');
             });
         };
 }]);
@@ -71,7 +74,7 @@ app.controller('loginCtrl', ['$scope', '$location', '$resource',
                         localStorage.setItem("id", user[i]._id );
                     }
                 }
-                $location.path('/:userName');
+                $location.path('/');
             });
     };
 }]);
@@ -88,7 +91,7 @@ app.controller('EditChirpCtrl', ['$scope', '$resource', '$location', '$routePara
 
         $scope.save = function(){
             Chirp.update($scope.posts, function(){
-                $location.path('/:userName');
+                $location.path('/');
             });
         }
     }]);
@@ -103,7 +106,7 @@ app.controller('DeleteChirpCtrl', ['$scope', '$resource', '$location', '$routePa
     
         $scope.delete = function(){
             Chirp.delete({ id: $routeParams.id }, function(posts){
-                $location.path('/:userName');
+                $location.path('/');
             });
         }
 }]);
