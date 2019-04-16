@@ -2,7 +2,7 @@ var app = angular.module('chirpApp', ['ngResource','ngRoute']);
 
 app.config(['$routeProvider', function($routeProvider){
     $routeProvider
-        .when('/', {
+        .when('/login', {
             templateUrl: 'partials/login-form.html',
             controller: 'loginCtrl'
         })
@@ -27,7 +27,7 @@ app.config(['$routeProvider', function($routeProvider){
             controller: 'DeleteChirpCtrl'
         })
         .otherwise({
-            redirectTo: '/'
+            redirectTo: '/login'
         });
 }]);
 
@@ -64,7 +64,7 @@ app.controller('loginCtrl', ['$scope', '$location', '$resource',
     function($scope, $location, $resource){
         var User = $resource('/api/users/:userName',  { userName: '@userName' });
         $scope.save = function(){
-            User.get( function(user){
+            User.query( function(user){
                 console.log(user);
                 $location.path('/:userName');
             });
