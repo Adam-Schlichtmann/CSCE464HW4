@@ -45,7 +45,7 @@ app.controller('AddChirpCtrl', ['$scope', '$resource', '$location',
         $scope.save = function(){
             var Chirp = $resource('/api/posts');
             Chirp.save($scope.posts, function(){
-                $location.path('/');
+                $location.path('/:userName');
             });
         };
 }]);
@@ -66,6 +66,11 @@ app.controller('loginCtrl', ['$scope', '$location', '$resource',
         $scope.save = function(){
             User.query( function(user){
                 console.log(user);
+                for (var i = 0; i < user.length; i++){
+                    if (user[i].userName == $scope.userName){
+                        localStorage.setItem("id", user[i]._id );
+                    }
+                }
                 $location.path('/:userName');
             });
     };
@@ -83,7 +88,7 @@ app.controller('EditChirpCtrl', ['$scope', '$resource', '$location', '$routePara
 
         $scope.save = function(){
             Chirp.update($scope.posts, function(){
-                $location.path('/');
+                $location.path('/:userName');
             });
         }
     }]);
@@ -98,7 +103,7 @@ app.controller('DeleteChirpCtrl', ['$scope', '$resource', '$location', '$routePa
     
         $scope.delete = function(){
             Chirp.delete({ id: $routeParams.id }, function(posts){
-                $location.path('/');
+                $location.path('/:userName');
             });
         }
 }]);
