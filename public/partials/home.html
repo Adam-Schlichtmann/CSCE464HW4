@@ -14,3 +14,12 @@
         </a>
     </li>
 </ul>
+<br>
+<h3>People You may Know</h3>
+<ul>
+    <li ng-repeat='user in newUsers'>
+        <a href="/#/newFollow/{{user._id}}">
+            {{user.name}} 
+        </a>
+    </li>
+</ul>

@@ -10,13 +10,17 @@ app.config(['$routeProvider', function($routeProvider){
             templateUrl: 'partials/register-form.html',
             controller: 'registerCtrl'
         })
-        .when('/', {
+        .when('/home', {
             templateUrl: 'partials/home.html',
             controller: 'HomeCtrl'
         })
         .when('/add-chirp', {
             templateUrl: 'partials/post-form.html',
             controller: 'AddChirpCtrl'
+        })
+        .when('/newFollow/:id', {
+            templateUrl: 'partials/addingFollower.html',
+            controller: 'newFollowerCtrl'
         })
         .when('/chirp/:id', {
             templateUrl: 'partials/update-form.html',
@@ -33,22 +37,44 @@ app.config(['$routeProvider', function($routeProvider){
 
 app.controller('HomeCtrl', ['$scope', '$resource', 
     function($scope, $resource){
-        var User = $resource('/api/posts');
+        var Post = $resource('/api/posts');
         
-        User.query(function(posts){
+        Post.query(function(posts){
             console.log(posts);
             $scope.posts = posts;
+        });
+        // gets three random users
+        var User = $resource('/api/users');
+        User.query( function(user){
+            for (var i = 0; i < user.length; i++){
+                if (user[i]._id == localStorage['id']){
+                    var currentUser = user[i];
+                    user.splice(i,1);
+                }
+            }
+            for (var j = 0; j < currentUser.following.length; j++){
+                for (var k = 0; k < user.length; k++){
+                    if (currentUser.following[j] == user[k]._id){
+                        user.splice(j,1);
+                    }
+                }
+            }
+            while (user.length > 3){
+                var x = Math.floor(Math.random() * user.length);
+                user.splice(x,1);
+            }
+            $scope.newUsers = user;
+        });
 
-    });
-}]);
-
+    }]
+);
 
 app.controller('AddChirpCtrl', ['$scope', '$resource', '$location',
     function($scope, $resource, $location){
         $scope.save = function(){
             var Chirp = $resource('/api/posts');
             Chirp.save($scope.posts, function(){
-                $location.path('/');
+                $location.path('/home');
             });
         };
 }]);
@@ -58,7 +84,7 @@ app.controller('registerCtrl', ['$scope', '$resource', '$location',
         $scope.save = function(){
             var Chirp = $resource('/api/users');
             Chirp.save($scope.users, function(){
-                $location.path('/');
+                $location.path('/login');
             });
         };
 }]);
@@ -74,7 +100,7 @@ app.controller('loginCtrl', ['$scope', '$location', '$resource',
                         console.log('User has been saved in the cache');
                     }
                 }
-                $location.path('/');
+                $location.path('/home');
             });
     };
 }]);
@@ -91,11 +117,32 @@ app.controller('EditChirpCtrl', ['$scope', '$resource', '$location', '$routePara
 
         $scope.save = function(){
             Chirp.update($scope.posts, function(){
-                $location.path('/');
+                $location.path('/home');
             });
         }
-    }]);
+    }]
+);
 
+
+app.controller('newFollowerCtrl', ['$scope', '$resource', '$location',
+    function($scope, $resource, $location){
+        var User = $resource('/api/users/:id', { id: '@_id' }, {
+            update: { method: 'PUT' }
+        });
+        console.log("Here 1");
+        User.get({ id: localStorage['id'] }, function(current){
+            console.log(current);
+            $scope.current = current;
+        });
+        
+        console.log("Here 2");
+        User.update($scope.current, function(){
+            $location.path('/home');
+        });
+        console.log("Here 3");
+        
+    }]
+);
 
 app.controller('DeleteChirpCtrl', ['$scope', '$resource', '$location', '$routeParams',
     function($scope, $resource, $location, $routeParams){
@@ -106,7 +153,7 @@ app.controller('DeleteChirpCtrl', ['$scope', '$resource', '$location', '$routePa
     
         $scope.delete = function(){
             Chirp.delete({ id: $routeParams.id }, function(posts){
-                $location.path('/');
+                $location.path('/home');
             });
         }
 }]);
