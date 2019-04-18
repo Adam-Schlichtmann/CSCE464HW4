@@ -3,10 +3,10 @@
 <form>
     <div class="form-group">
         <label>Enter Username and password</label>		
-        <input class="form-control" ng-model="users.userName"></input>
-        <input type="password" class="form-control" ng-model="users.password"></input>
+        <input class="form-control" ng-model="userName"></input>
+        <input type="password" class="form-control" ng-model="password"></input>
     </div>
-    <input type="button" class="btn btn-primary" value="Login" ng-click="save()"></input>	
+    <input type="button" class="btn btn-primary" value="Login" ng-click="save(userName,password)"></input>	
 </form>
 
 <p>

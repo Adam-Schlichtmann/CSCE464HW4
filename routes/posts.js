@@ -59,13 +59,13 @@ router.post('/', function(req, res){
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateTime = date+' '+time;
-    console.log(req.body.content);
     collection.insert({
         content: req.body.content,
         replies: [],
         date: dateTime,
         favorited: 0
     }, function(err, movie){
+        console.log(err);
         if (err) throw err;
 
         res.json(movie);

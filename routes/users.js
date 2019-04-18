@@ -19,7 +19,6 @@ router.get('/:userName', function(req, res) {
   console.log("HERE");
   collection.findOne({ userName: req.body.userName }, function(err, user){
       if (err) throw err;
-      
       res.json(user);
   });
 });

@@ -66,12 +66,12 @@ app.controller('registerCtrl', ['$scope', '$resource', '$location',
 app.controller('loginCtrl', ['$scope', '$location', '$resource',
     function($scope, $location, $resource){
         var User = $resource('/api/users/:userName',  { userName: '@userName' });
-        $scope.save = function(){
+        $scope.save = function(userName,password){
             User.query( function(user){
-                console.log(user);
                 for (var i = 0; i < user.length; i++){
-                    if (user[i].userName == $scope.userName){
-                        localStorage.setItem("id", user[i]._id );
+                    if (user[i].userName == userName){
+                        localStorage['id'] = user[i]._id;
+                        console.log('User has been saved in the cache');
                     }
                 }
                 $location.path('/');
