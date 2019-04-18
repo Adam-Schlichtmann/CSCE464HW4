@@ -38,7 +38,7 @@ app.config(['$routeProvider', function($routeProvider){
 app.controller('HomeCtrl', ['$scope', '$resource', 
     function($scope, $resource){
         var Post = $resource('/api/posts');
-        
+         
         Post.query(function(posts){
             console.log(posts);
             $scope.posts = posts;
@@ -49,6 +49,8 @@ app.controller('HomeCtrl', ['$scope', '$resource',
             for (var i = 0; i < user.length; i++){
                 if (user[i]._id == localStorage['id']){
                     var currentUser = user[i];
+                    $scope.profileName = currentUser.userName;
+                    $scope.followers = 200;
                     user.splice(i,1);
                 }
             }
