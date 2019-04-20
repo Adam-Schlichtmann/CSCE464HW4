@@ -1,5 +1,6 @@
 var app = angular.module('chirpApp', ['ngResource','ngRoute']);
 
+
 app.config(['$routeProvider', function($routeProvider){
     $routeProvider
         .when('/login', {
@@ -50,6 +51,7 @@ app.controller('HomeCtrl', ['$scope', '$resource',
                 if (user[i]._id == localStorage['id']){
                     var currentUser = user[i];
                     $scope.profileName = currentUser.userName;
+                    $scope.profileID= currentUser._id;
                     $scope.followers = user[i].following.length;
                     user.splice(i,1);
                 }
@@ -74,7 +76,7 @@ app.controller('HomeCtrl', ['$scope', '$resource',
 app.controller('AddChirpCtrl', ['$scope', '$resource', '$location',
     function($scope, $resource, $location){
         $scope.save = function(){
-            var Chirp = $resource('/api/posts');
+            var Chirp = $resource('/api/posts/'+localStorage['id']);
             Chirp.save($scope.posts, function(){
                 $location.path('/home');
             });
