@@ -1,17 +1,18 @@
-<div class="homepage" align="center" style="; background-color:powderblue;">
+<div class="homepage" align="center" style="background-color:powderblue">
     <H1>Home Page</H1>
     <div class="row">
         <div class="column" style="width: 25%">
             <div id="profile" style=" margin:auto; border-style: solid">
                 <h3> @{{profileName}}</h3>
-                <h4> Followers :{{followers}}</h4>
+                <h4> Followers: {{followers}}</h4>
             </div>
             <div id="followersSearch">
                 <h3>People You may Know</h3>
                 <ul>
                     <li ng-repeat='user in newUsers'>
-                        <a href="/#/newFollow/{{user._id}}">
                             {{user.name}} 
+                        <a href="/#/newFollow/{{user._id}}">
+                            Follow
                         </a>
                     </li>
                 </ul>
@@ -21,14 +22,13 @@
             <p>
                 <a href="/#/add-chirp">New Post</a>
             </p>
-            <div ng-app></div>
                 <div ng-repeat='post in posts'>
                     <div id="posts" align="center" >
                         <div id="post_content" class="row">
                             <div id="post_profile" style=" width:30px; float:left; border-right: black" >
-                                <a>
-                                    @asdf
-                                </a>
+                                <p>
+                                    @{{profileName}}
+                                </p>
                             </div>
                             <div id="post_text" style="margin:auto">
                                 <a href="/#/chirp/{{post._id}}">

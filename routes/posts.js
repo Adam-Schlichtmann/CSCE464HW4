@@ -28,21 +28,20 @@ router.put('/:id', function(req, res){
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateTime = date+' '+time;
+    console.log(req.params.id);
     collection.update({
         _id: req.params.id
     },
-    {
+    { $set: {
         content: req.body.content,
-        replies: [],
         date: dateTime,
-        favorited: 0
+        }
     }, function(err, post){
         if (err) throw err;
 
         res.json(post);
     });
 });
-
 
 router.delete('/:id', function(req, res){
     var collection = db.get('posts');

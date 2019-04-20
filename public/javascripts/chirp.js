@@ -50,7 +50,7 @@ app.controller('HomeCtrl', ['$scope', '$resource',
                 if (user[i]._id == localStorage['id']){
                     var currentUser = user[i];
                     $scope.profileName = currentUser.userName;
-                    $scope.followers = 200;
+                    $scope.followers = user[i].following.length;
                     user.splice(i,1);
                 }
             }
@@ -108,7 +108,8 @@ app.controller('loginCtrl', ['$scope', '$location', '$resource',
 }]);
 
 app.controller('EditChirpCtrl', ['$scope', '$resource', '$location', '$routeParams',
-    function($scope, $resource, $location, $routeParams){	
+    function($scope, $resource, $location, $routeParams){
+        
         var Chirp = $resource('/api/posts/:id', { id: '@_id' }, {
             update: { method: 'PUT' }
         });
@@ -116,7 +117,7 @@ app.controller('EditChirpCtrl', ['$scope', '$resource', '$location', '$routePara
         Chirp.get({ id: $routeParams.id }, function(posts){
             $scope.posts = posts;
         });
-
+        
         $scope.save = function(){
             Chirp.update($scope.posts, function(){
                 $location.path('/home');
@@ -126,25 +127,57 @@ app.controller('EditChirpCtrl', ['$scope', '$resource', '$location', '$routePara
 );
 
 
-app.controller('newFollowerCtrl', ['$scope', '$resource', '$location',
-    function($scope, $resource, $location){
-        var User = $resource('/api/users/:id', { id: '@_id' }, {
+app.controller('newFollowerCtrl', ['$scope', '$resource', '$location', '$routeParams',
+    function($scope, $resource, $location, $routeParams){
+        $scope.currentID = localStorage['id'];
+        var Chirp = $resource('/api/users/:id', { id: '@_id' }, {
             update: { method: 'PUT' }
         });
-        console.log("Here 1");
-        User.get({ id: localStorage['id'] }, function(current){
-            console.log(current);
-            $scope.current = current;
+
+        Chirp.get({ id: $scope.currentID }, function(user){
+            $scope.user = user;
+            console.log(user._id);
+            console.log(user.following);
+            
         });
+        //$scope.followers = $scope.user.following;
         
-        console.log("Here 2");
-        User.update($scope.current, function(){
-            $location.path('/home');
-        });
-        console.log("Here 3");
-        
+        $scope.save = function(){
+            Chirp.update($scope.user, function(){
+                $location.path('/home');
+            });
+        }
     }]
 );
+
+// app.controller('newFollowerCtrl', ['$scope', '$resource', '$location', '$routeParams',
+//     function($scope, $resource, $location, $routeParams){
+//         $scope.currentID = localStorage['id'];
+//         console.log($routeParams.id);	
+//         console.log($scope.currentID);
+//         var User = $resource('/api/users/:id', { id: '@_id' }, {
+//             update: { method: 'PUT' }
+//         });
+//         console.log("Here 1");
+//         User.get({ id: $scope.currentID }, function(current){
+//             console.log(current._id);
+//             $scope.current = current._id;
+//             User.update($scope.current, function(){
+//                 $location.path('/home');
+//             });
+//         });
+        
+//         console.log("Here 2");
+//         $scope.save = function(){
+//             User.update($scope.current, function(){
+//                 $location.path('/home');
+//             });
+//         }
+        
+//         console.log("Here 3");
+        
+//     }]
+// );
 
 app.controller('DeleteChirpCtrl', ['$scope', '$resource', '$location', '$routeParams',
     function($scope, $resource, $location, $routeParams){
