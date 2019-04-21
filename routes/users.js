@@ -26,8 +26,6 @@ router.get('/:id', function(req, res) {
 router.put('/:id', function(req, res){
   var collection = db.get('users');
   var follow = req.body.following;
-  console.log(req.body);
-  console.log(req.params.id);
   follow.push(req.params.id);
   collection.update({
       _id: req.body._id
@@ -41,6 +39,24 @@ router.put('/:id', function(req, res){
       res.json(user);
   });
 });
+
+// Add favorite
+router.put('/favorite/:id', function(req, res){
+    var collection = db.get('users');
+    var favs = req.body.favorites;
+    favs.push(req.params.id);
+    collection.update({
+        _id: req.body._id
+    },
+    { $set: {
+        favorites: favs
+    }
+    }, function(err, user){
+        if (err) throw err;
+  
+        res.json(user);
+    });
+  });
 
 // For registering a new user
 router.post('/', function(req, res){

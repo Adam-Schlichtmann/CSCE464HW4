@@ -15,6 +15,10 @@ app.config(['$routeProvider', function($routeProvider){
             templateUrl: 'partials/home.html',
             controller: 'HomeCtrl'
         })
+        .when('/favorite/:id', {
+            templateUrl: 'partials/home.html',
+            controller: 'favoriteCtrl'
+        })
         .when('/add-chirp', {
             templateUrl: 'partials/post-form.html',
             controller: 'AddChirpCtrl'
@@ -36,39 +40,53 @@ app.config(['$routeProvider', function($routeProvider){
         });
 }]);
 
-app.controller('HomeCtrl', ['$scope', '$resource', 
-    function($scope, $resource){
+app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
+    function($scope, $resource, $location, $routeParams){
         var Post = $resource('/api/posts');
          
         Post.query(function(posts){
             console.log(posts);
             $scope.posts = posts;
         });
+
         // gets three random users
         var User = $resource('/api/users');
-        User.query( function(user){
-            for (var i = 0; i < user.length; i++){
-                if (user[i]._id == localStorage['id']){
-                    var currentUser = user[i];
-                    $scope.profileName = currentUser.userName;
-                    $scope.profileID= currentUser._id;
-                    $scope.followers = user[i].following.length;
-                    user.splice(i,1);
+        User.query( function(userl){
+            for (var i = 0; i < userl.length; i++){
+                if (userl[i]._id == localStorage['id']){
+                    var user = userl[i];
+                    $scope.profileName = user.userName;
+                    $scope.profileID= user._id;
+                    $scope.followers = user.following.length;
+                    $scope.favs = user.favorites;
+                    userl.splice(i,1);
                 }
             }
-            for (var j = 0; j < currentUser.following.length; j++){
-                for (var k = 0; k < user.length; k++){
-                    if (currentUser.following[j] == user[k]._id){
-                        user.splice(k,1);
+            $scope.user = user;
+            for (var j = 0; j < user.following.length; j++){
+                for (var k = 0; k < userl.length; k++){
+                    if (user.following[j] == userl[k]._id){
+                        userl.splice(k,1);
                     }
                 }
             }
-            while (user.length > 3){
-                var x = Math.floor(Math.random() * user.length);
-                user.splice(x,1);
+            while (userl.length > 3){
+                var x = Math.floor(Math.random() * userl.length);
+                userl.splice(x,1);
             }
-            $scope.newUsers = user;
+            $scope.newUsers = userl;
         });
+        $scope.favorite = function(postID){
+            $scope.currentID = localStorage['id'];
+            console.log(postID);
+            var Chirp = $resource('/api/users/favorite/:id', { id:  postID}, {
+                update: { method: 'PUT' }
+            });
+        
+            Chirp.update($scope.user, function(){
+                $location.path('/home');
+            });
+        }
 
     }]
 );
@@ -98,13 +116,22 @@ app.controller('loginCtrl', ['$scope', '$location', '$resource',
         var User = $resource('/api/users/:userName',  { userName: '@userName' });
         $scope.save = function(userName,password){
             User.query( function(user){
+                var verified = false;
                 for (var i = 0; i < user.length; i++){
                     if (user[i].userName == userName){
                         localStorage['id'] = user[i]._id;
                         console.log('User has been saved in the cache');
+                        verified = true;
                     }
                 }
-                $location.path('/home');
+                if(verified){
+                    $location.path('/home');
+                } else {
+                    $location.path('/');
+                }
+                
+
+                
             });
     };
 }]);
@@ -152,6 +179,30 @@ app.controller('newFollowerCtrl', ['$scope', '$resource', '$location', '$routePa
                 $location.path('/home');
             });
         }
+    }]
+);
+
+app.controller('favoriteCtrl', ['$scope', '$resource', '$location', '$routeParams',
+    function($scope, $resource, $location, $routeParams){
+        $scope.currentID = localStorage['id'];
+        
+        var Chirp = $resource('/api/users/favorite/:id', { id: $scope.currentID }, {
+            update: { method: 'PUT' }
+        });
+
+        var user = $resource('/api/users/:id', { id: $scope.currentID }, {
+            update: { method: 'PUT' }
+        });
+        user.get({ id: $scope.currentID }, function(user){
+            $scope.user = user;
+            
+        });
+
+       
+        Chirp.update($scope.user, function(){
+            $location.path('/home');
+        });
+        
     }]
 );
 
