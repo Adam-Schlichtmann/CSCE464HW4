@@ -79,13 +79,37 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
         $scope.favorite = function(postID){
             $scope.currentID = localStorage['id'];
             console.log(postID);
-            var Chirp = $resource('/api/users/favorite/:id', { id:  postID}, {
+
+            var Poster = $resource('/api/posts/:id');
+            Poster.get({ id: postID }, function(post){
+                $scope.postToUpdate = post;
+            });
+            console.log($scope.postToUpdate);
+            var Post = $resource('/api/posts/addFav/:id', { id:  postID}, {
                 update: { method: 'PUT' }
             });
-        
-            Chirp.update($scope.user, function(){
-                $location.path('/home');
-            });
+
+            // Has to wait so that the post can be gotten and passed in
+            setTimeout(function(){
+                Post.update($scope.postToUpdate, function(){
+                    
+                });
+    
+                var Chirp = $resource('/api/users/favorite/:id', { id:  postID}, {
+                    update: { method: 'PUT' }
+                });
+            
+                Chirp.update($scope.user, function(){
+                    $location.path('/home');
+                });
+
+                var P = $resource('/api/posts');
+
+                P.query(function(posts){
+                    console.log(posts);
+                    $scope.posts = posts;
+                });
+            }, 250);
         }
 
     }]

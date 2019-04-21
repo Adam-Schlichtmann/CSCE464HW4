@@ -48,6 +48,27 @@ router.put('/:id', function(req, res){
     });
 });
 
+router.put('/addFav/:id', function(req, res){
+    var collection = db.get('posts');
+    var favs = req.body.favorited;
+    favs++;
+    console.log(favs);
+    console.log(req.params.id);
+    collection.update({
+        _id: req.params.id
+    },
+    { $set: {
+        favorited: favs
+        }
+    }, function(err, post){
+        if (err) throw err;
+
+        res.json(post);
+    });
+});
+
+
+
 router.delete('/:id', function(req, res){
     var collection = db.get('posts');
     collection.remove({ _id: req.params.id }, function(err, post){

@@ -5,7 +5,7 @@
             <div id="profile" style=" margin:auto; border-style: solid">
                 <h3 > @{{profileName}}</h3>
                 <h3 ng-model="posts.userID" style="visibility: hidden"> {{profileID}}</h3>
-                <h4> Following: {{followers}}</h4>
+                <h4> Following: {{user.following.length}}</h4>
             </div>
             <div id="followersSearch">
                 <h3>People You may Know</h3>
@@ -42,8 +42,9 @@
                         <div id="options" align="right" class="row">
                             <div id="favorite" class="column">
                                 <input class="form-control" type="hidden" name="favorites" id="favorites"  ng-model="user.favorites">
-                                <button value="favorites" class="glyphicon glyphicon-heart" ng-click="favorite(post._id)">    
-                            </div>      
+                                <button value="favorites" class="glyphicon glyphicon-heart" ng-click="favorite(post._id)">  
+                            </div>    
+                            <p>Likes: {{post.favorited}}</p>    
                             <div id="delete" align="right">
                                 <a href="/#/chirp/delete/{{post._id}}">
                                     <i class="glyphicon glyphicon-remove"></i>
