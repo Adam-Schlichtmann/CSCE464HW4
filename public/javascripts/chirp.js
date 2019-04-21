@@ -132,18 +132,21 @@ app.controller('EditChirpCtrl', ['$scope', '$resource', '$location', '$routePara
 app.controller('newFollowerCtrl', ['$scope', '$resource', '$location', '$routeParams',
     function($scope, $resource, $location, $routeParams){
         $scope.currentID = localStorage['id'];
-        var Chirp = $resource('/api/users/:id', { id: '@_id' }, {
+        $scope.newID = $routeParams.id;
+        
+        var Chirp = $resource('/api/users/:id', { id: $scope.newID }, {
             update: { method: 'PUT' }
         });
 
         Chirp.get({ id: $scope.currentID }, function(user){
             $scope.user = user;
-            console.log(user._id);
-            console.log(user.following);
             
         });
-        //$scope.followers = $scope.user.following;
-        
+
+        Chirp.get({ id: $scope.newID }, function(newUser){
+            $scope.newUser = newUser;
+            
+        });
         $scope.save = function(){
             Chirp.update($scope.user, function(){
                 $location.path('/home');
@@ -152,34 +155,6 @@ app.controller('newFollowerCtrl', ['$scope', '$resource', '$location', '$routePa
     }]
 );
 
-// app.controller('newFollowerCtrl', ['$scope', '$resource', '$location', '$routeParams',
-//     function($scope, $resource, $location, $routeParams){
-//         $scope.currentID = localStorage['id'];
-//         console.log($routeParams.id);	
-//         console.log($scope.currentID);
-//         var User = $resource('/api/users/:id', { id: '@_id' }, {
-//             update: { method: 'PUT' }
-//         });
-//         console.log("Here 1");
-//         User.get({ id: $scope.currentID }, function(current){
-//             console.log(current._id);
-//             $scope.current = current._id;
-//             User.update($scope.current, function(){
-//                 $location.path('/home');
-//             });
-//         });
-        
-//         console.log("Here 2");
-//         $scope.save = function(){
-//             User.update($scope.current, function(){
-//                 $location.path('/home');
-//             });
-//         }
-        
-//         console.log("Here 3");
-        
-//     }]
-// );
 
 app.controller('DeleteChirpCtrl', ['$scope', '$resource', '$location', '$routeParams',
     function($scope, $resource, $location, $routeParams){
