@@ -59,7 +59,7 @@ app.controller('HomeCtrl', ['$scope', '$resource',
             for (var j = 0; j < currentUser.following.length; j++){
                 for (var k = 0; k < user.length; k++){
                     if (currentUser.following[j] == user[k]._id){
-                        user.splice(j,1);
+                        user.splice(k,1);
                     }
                 }
             }

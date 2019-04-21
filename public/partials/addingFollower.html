@@ -1,5 +1,7 @@
-<H1>Are you sure you want to follow</H1>
-<input class="form-control" type="text" name="currentID" id="currentID"  ng-model="user._id">
-<input class="form-control" type="text" name="newID" id="newID"  ng-model="newUser._id">
-<input class="form-control" type="text" name="followers" id="followers"  ng-model="user.following">
-<input type="button" class="btn btn-primary" value="Save" ng-click="save()"></input>	
+<H1>Are you sure you want to follow:</H1>
+<H2>{{newUser.name}}</H2>
+<input class="form-control" type="hidden" name="currentID" id="currentID"  ng-model="user._id">
+<input class="form-control" type="hidden" name="newID" id="newID"  ng-model="newUser._id">
+<input class="form-control" type="hidden" name="followers" id="followers"  ng-model="user.following">
+<input type="button" class="btn btn-primary" value="Follow" ng-click="save()"></input>
+<a class="btn btn-danger" href="/#/home">Cancel</a>	
