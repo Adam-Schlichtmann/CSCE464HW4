@@ -76,6 +76,15 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
             }
             $scope.newUsers = userl;
         });
+
+        $scope.save = function(){
+            console.log("creating new post");
+            var Chirp = $resource('/api/posts/'+localStorage['id']);
+            Chirp.save($scope.posts, function(){
+                $location.path('/home');
+            });
+        };
+
         $scope.favorite = function(postID){
             $scope.currentID = localStorage['id'];
             console.log(postID);
@@ -114,16 +123,6 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
 
     }]
 );
-
-app.controller('AddChirpCtrl', ['$scope', '$resource', '$location',
-    function($scope, $resource, $location){
-        $scope.save = function(){
-            var Chirp = $resource('/api/posts/'+localStorage['id']);
-            Chirp.save($scope.posts, function(){
-                $location.path('/home');
-            });
-        };
-}]);
 
 app.controller('registerCtrl', ['$scope', '$resource', '$location',
     function($scope, $resource, $location){

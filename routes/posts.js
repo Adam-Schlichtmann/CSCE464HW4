@@ -79,6 +79,7 @@ router.delete('/:id', function(req, res){
 });
 
 router.post('/:userID', function(req, res){
+    console.log("posting to database");
     var collection = db.get('posts');
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
