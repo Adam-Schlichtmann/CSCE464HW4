@@ -88,11 +88,15 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
             for (var i = 0; i < $scope.temp.length; i++){
                 for(var l = 0; l < 1; l++){
                     var added = false;
+                    if ( $scope.temp[i].replyHead != undefined){
+                        break;
+                    }
                     if ( $scope.temp[i].author == localStorage['id']){
                         posts.push($scope.temp[i]);
                         added = true;
                         break;
                     } 
+                    
                     for ( var j = 0; j < $scope.user.favorites.length; j++){
                         if ($scope.user.favorites[j] == $scope.temp[i].id){
                             posts.push($scope.temp[i]);
