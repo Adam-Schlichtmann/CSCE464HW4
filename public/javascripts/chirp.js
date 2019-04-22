@@ -87,7 +87,6 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
             var posts = []
             console.log($scope.user);
             for (var i = 0; i < $scope.temp.length; i++){
-                
                 for(var l = 0; l < 1; l++){
                     var added = false;
                     if ( $scope.temp[i].author == localStorage['id']){
@@ -119,7 +118,12 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
                 b = new Date(b.date);
                 return a>b ? 1 : a<b ? -1 : 0;
             });
-            $scope.posts = posts;
+            if (!$scope.user.admin){
+                $scope.posts = $scope.temp;
+            } else {
+                $scope.posts = posts;
+            }
+            
         });
 
 
