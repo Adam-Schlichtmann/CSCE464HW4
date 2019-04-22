@@ -37,18 +37,35 @@
                             </div>
                             <div id="post_text" style="margin:auto">
                                 <br>
-                    <div id="posts" align="middle" class="row">
+                    <!-- <div id="posts" align="middle" class="row">
                         <div id="post_profile" class="column" style=" width:15%; height: 100px; border-right: 3px solid #000000" >
                             <p style="padding-top: 20px">
                                 @{{post.author}}
                             </p>
-                        </div>
+                        </div> -->
 
                         <div id="post_content" class="column" style=" width:70%; height: 100px;" >
                             <div id="post_text" class="row" style=" padding-top: 20px; height:70%">
-                                <a href="/#/chirp/{{post._id}}">
+                                <!-- <script type="text/javascript">
+                                    function writeLink(uid, pid, content){
+                                        console.log(uid);
+                                        console.log("called");
+                                        if(uid == pid){
+                                            document.write("<a href=\"/#/chirp/"+pid+"\">"+content+"</a>");
+                                        } else {
+                                            document.write("<p>" + content + "</p>");
+                                        }
+                                    }
+                                    
+                                </script>
+                                <script>writeLink(user._id, post.author, post.content);</script> -->
+                                <a ng-if="post.author == user._id" href="/#/chirp/{{post._id}}">
                                     {{post.content}}
                                 </a>    
+
+                                <p ng-if="post.author != user._id">
+                                    {{post.content}}
+                                </p> 
                             </div>
                             <div id="options" class="row" align="middle" style="margin:auto; padding-left: 30px; margin:auto; height:20px" >
                                 <div id="reply" class="column" style="padding-right: 10px">
@@ -63,7 +80,7 @@
                                 </div>    
                                    
                                 <div id="delete" class="column">
-                                    <a href="/#/chirp/delete/{{post._id}}">
+                                    <a ng-if="post.author == user._id" href="/#/chirp/delete/{{post._id}}">
                                         <i class="glyphicon glyphicon-remove"></i>
                                     </a>    
                                 </div>                            
