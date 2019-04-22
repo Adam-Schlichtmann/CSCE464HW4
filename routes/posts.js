@@ -78,8 +78,8 @@ router.delete('/:id', function(req, res){
     });
 });
 
-router.post('/:userID', function(req, res){
-    console.log("posting to database");
+router.post('/reply/:userID', function(req, res){
+    console.log(req);
     var collection = db.get('posts');
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -93,6 +93,7 @@ router.post('/:userID', function(req, res){
     
     var mentionsList = [];
     var post = req.body.content;
+    var replies = req.body.postID;
     for(var i = 0; i <post.length; i++){
         if(post[i] == '@'){
             var j = i;
@@ -120,7 +121,7 @@ router.post('/:userID', function(req, res){
 });
 
 
-router.post('/:newFollow', function(req, res){
+router.post('/:userID', function(req, res){
     var collection = db.get('posts');
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
