@@ -52,6 +52,8 @@ app.controller('LogoutCtrl', ['$scope', '$resource', '$location', '$routeParams'
 
 app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', '$window', '$timeout',
     function($scope, $resource, $location, $routeParams, $window, $timeout){
+        var x = document.getElementById("newChirp");
+        x.style.display="block";
         var User = $resource('/api/users');
         User.query( function(userl){
             for (var i = 0; i < userl.length; i++){
@@ -291,6 +293,8 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
 app.controller('notificationsCtrl', ['$scope', '$resource', '$location', '$routeParams', '$timeout',
     function($scope, $resource, $location, $routeParams, $timeout){
         // gets three random users
+        var x = document.getElementById("newChirp");
+        x.style.display="none";
         var User = $resource('/api/users');
         User.query( function(userl){
             $scope.allUsers = userl;
