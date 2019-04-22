@@ -173,6 +173,7 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
                 var Chirp = $resource('/api/posts/reply/'+localStorage['id']+"/"+$scope.newReply.postID);
                 Chirp.save(n, function(){
                     $location.path('/home');
+                    $window.location.reload();
                 });
             }, 250);
         };
