@@ -46,19 +46,6 @@
 
                         <div id="post_content" class="column" style=" width:70%; height: 100px;" >
                             <div id="post_text" class="row" style=" padding-top: 20px; height:70%">
-                                <!-- <script type="text/javascript">
-                                    function writeLink(uid, pid, content){
-                                        console.log(uid);
-                                        console.log("called");
-                                        if(uid == pid){
-                                            document.write("<a href=\"/#/chirp/"+pid+"\">"+content+"</a>");
-                                        } else {
-                                            document.write("<p>" + content + "</p>");
-                                        }
-                                    }
-                                    
-                                </script>
-                                <script>writeLink(user._id, post.author, post.content);</script> -->
                                 <a ng-if="post.author == user._id" href="/#/chirp/{{post._id}}">
                                     {{post.content}}
                                 </a>    
