@@ -27,6 +27,15 @@ router.get('/:id', function(req, res) {
     });
 });
 
+router.get('/replies/:id', function(req, res) {
+    var collection = db.get('posts');
+    collection.find({ replyHead: req.params.id }, function(err, post){
+        if (err) throw err;
+        console.log(post);    
+        res.json(post);
+    });
+});
+
 router.put('/:id', function(req, res){
     var collection = db.get('posts');
     var today = new Date();
@@ -67,6 +76,24 @@ router.put('/addFav/:id', function(req, res){
     });
 });
 
+router.put('/addReply/:id', function(req, res){
+    var collection = db.get('posts');
+    reply++;
+    console.log("inside increment reply");
+    console.log(reply);
+    console.log(req.params.id);
+    collection.update({
+        _id: req.params.id
+    },
+    { $set: {
+        replyCount: reply
+        }
+    }, function(err, post){
+        if (err) throw err;
+
+        res.json(post);
+    });
+});
 
 
 router.delete('/:id', function(req, res){
@@ -78,8 +105,7 @@ router.delete('/:id', function(req, res){
     });
 });
 
-router.post('/reply/:userID', function(req, res){
-    console.log(req);
+router.post('/reply/:userID/:postID', function(req, res){
     var collection = db.get('posts');
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -90,10 +116,9 @@ router.post('/reply/:userID', function(req, res){
     } else {
         var authorTemp = req.body.author;
     }
-    
+    var replyPostID = req.params.postID;
     var mentionsList = [];
     var post = req.body.content;
-    var replies = req.body.postID;
     for(var i = 0; i <post.length; i++){
         if(post[i] == '@'){
             var j = i;
@@ -107,11 +132,12 @@ router.post('/reply/:userID', function(req, res){
    
     collection.insert({
         content: req.body.content,
-        replies: [],
+        replyHead: replyPostID,
         date: dateTime,
         author: authorTemp,
         mentions: mentionsList,
-        favorited: 0
+        favorited: 0,
+        replyCount: 0
     }, function(err, movie){
         console.log(err);
         if (err) throw err;
@@ -150,7 +176,8 @@ router.post('/:userID', function(req, res){
         date: dateTime,
         author: authorTemp,
         mentions: mentionsList,
-        favorited: 0
+        favorited: 0,
+        replyCount:0
     }, function(err, movie){
         console.log(err);
         if (err) throw err;

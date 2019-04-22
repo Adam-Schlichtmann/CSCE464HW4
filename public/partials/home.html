@@ -2,9 +2,12 @@
 
 </script>
 <div class="homepage" align="center" style="background-color:powderblue">
-    <H1>Home Page</H1>
+    <div class="topnav">
+        <a class="active" href="#/home">Home</a>
+        <a href="#/viewnotifications/{{user._id}}">Notifications</a>
+        <a href="#/logout/" style="float:right">Log Out</a>
+    </div>
     <div class="row">
-        <a href="/#/viewnotifications/{{user._id}}">Notification page</a>
         <div class="column" style="width: 25%">
             <div id="profile" style=" margin:auto; border-style: solid">
                 <h3 > @{{profileName}}</h3>
@@ -53,7 +56,7 @@
                                 <div id="options" class="row" align="middle" style="margin:auto; padding-left: 250px; height:20%" >
                                     <div id="reply" class="column" style="padding-right: 10px">
                                         <button class="glyphicon glyphicon-share-alt" ng-click="showReplyBox(post._id)">
-                                            <i>{{post.replies.length}}</i>
+                                            <i>{{post.replyCount}}</i>
                                         </button>
                                     </div>
                                     <div id="favorite" class="column" style="padding-right: 10px">
@@ -88,20 +91,35 @@
                                 
                             </div>                                
                         </div>
-
                     </div>
+                    <div ng-repeat='reply in replies'>
+                        <div id="replies" align="middle" class="row">
+                            <div id="replies_profile" class="column" style=" width:15%; height: 100px; border-right: 3px solid #000000" >
+                                <p style="padding-top: 20px">
+                                    @{{reply.author}}
+                                </p>
+                            </div>
+                            <div id="replies_content" class="column" style=" width:70%; height: 100px;" >
+                                <div id="replies_text" class="row" style=" padding-top: 20px; height:70%">
+                                    
+                                    {{reply.content}}
+                                    
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                        
                     <div>
                         Replying to @{{replyPostAuthor}}
                         <form>
                             <div class="form-group" style="width: 800px">
                                 <input class="form-control" ng-model="newReply.content" maxlength="144"></input>
                             </div>
-                            <input type="button" class="btn btn-primary" value="Chirp" ng-click="saveReply()"></input>    
+                            <input type="button" class="btn btn-primary" value="Chirp" ng-click="newReply()"></input>    
                         </form>
                     </div>
                   </div>
-                </div>
-            <br>        
+                </div>       
         </div>
     </div>
     <div id="deleteChirp" class="deletePopUp">
@@ -111,20 +129,13 @@
             <p>
                 Are you sure you want to delete this post?
             </p>
-
-
             <h2>
                 {{deletePost.content}}
             </h2>
-            
-
-            
-
             <input type="button" value="Yes, Delete" class="btn btn-danger" ng-click="deleteChirp(deletePost._id)" />
 
             <a class="btn btn-default" ng-click="closeDeleteChirpBox()">No, Go Back</a>
-        </div>
-        
+        </div>        
     </div>
 </div>
 
@@ -208,5 +219,35 @@ body {background-color: powderblue;}
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+
+.topnav {
+  background-color: #333;
+  overflow: hidden;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: red;
+  color: white;
 }
 </style>

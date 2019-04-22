@@ -35,9 +35,19 @@ app.config(['$routeProvider', function($routeProvider){
             templateUrl: 'partials/home.html',
             controller: 'notificationsCtrl'
         })
+        .when('/logout/', {
+            templateUrl: '/login-form.html',
+            controller: 'LogoutCtrl'
+        })
         .otherwise({
             redirectTo: '/login'
         });
+}]);
+
+app.controller('LogoutCtrl', ['$scope', '$resource', '$location', '$routeParams',
+    function($scope, $resource, $location, $routeParams, $window){
+        localStorage.removeItem('id');
+        $location.path('#/login');
 }]);
 
 app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', '$window', '$timeout',
@@ -148,13 +158,30 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
             });
         };
 
-        $scope.saveReply = function(){
+        $scope.newReply = function(){
             console.log("sending new reply to backend");
-            console.log($scope.newReply);
-            var Chirp = $resource('/api/posts/reply/'+localStorage['id']);
-            Chirp.save($scope.newReply, function(){
-                $location.path('/home');
-            });
+            console.log($scope.newReply.content);
+            console.log($scope.newReply.postID);
+            var n = {
+                        content: $scope.newReply.content
+                    } 
+            
+            setTimeout(function(){
+                var Chirp = $resource('/api/posts/reply/'+localStorage['id']+"/"+$scope.newReply.postID);
+                Chirp.save(n, function(){
+                    $location.path('/home');
+                });
+                console.log("incrementing post count");
+                var Post = $resource('/api/posts/addReply/:id', { id:  $scope.newReply.postID }, {
+                    update: { method: 'PUT' }
+                });
+            
+                // Chirp.update($scope.user, function(){
+                //     $window.location.reload();
+                // });
+
+                
+            }, 250);
         };
 
         var modal = document.getElementById('replyBox');
@@ -169,20 +196,24 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
         $scope.showReplyBox = function(postID){
             var x = document.getElementById("replyBox");
             x.style.display="block";
-
-            console.log("post id is :" +postID);
+            $scope.newReply.postID = postID;
+            console.log($scope.newReply);
             var Chirp = $resource('/api/posts/:id');
             var User = $resource('/api/users');
             var authorIDtemp;
             Chirp.get({ id: postID }, function(post){
                 $scope.replyPost = post;
-                authorIDtemp = post.author
-                
+                authorIDtemp = post.author                
             })
             // User.get({ id: authorIDtemp }, function(user){
             //     $scope.replyPostAuthor = user.userName;
             //     console.log(user.userName);
             // });
+
+            var Chirp = $resource('/api/posts/replies/:id');
+            Chirp.get({ id: postID }, function(post){
+                $scope.replies = posts;
+            })
         }
 
         $scope.closeReplyBox = function(){
@@ -193,10 +224,10 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
         $scope.deleteChirpBox = function(deleteChirpID){
             var x = document.getElementById("deleteChirp");
             x.style.display="block";
+            console.log($scope.newReply);
             var Chirp = $resource('/api/posts/:id');
             Chirp.get({ id: deleteChirpID }, function(post){
                 $scope.deletePost = post;
-                console.log(post);
             })
         }
 
