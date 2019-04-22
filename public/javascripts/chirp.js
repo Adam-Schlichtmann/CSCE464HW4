@@ -42,16 +42,18 @@ app.config(['$routeProvider', function($routeProvider){
 
 app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
     function($scope, $resource, $location, $routeParams){
-        var Post = $resource('/api/posts');
-         
-        Post.query(function(posts){
-            console.log(posts);
-            $scope.posts = posts;
-        });
+
+        // var Post = $resource('/api/posts');
+
+        // Post.query(function(po){
+        //     console.log(po);
+        //     $scope.posts = po;
+        // });
 
         // gets three random users
         var User = $resource('/api/users');
         User.query( function(userl){
+            $scope.allUsers = userl;
             for (var i = 0; i < userl.length; i++){
                 if (userl[i]._id == localStorage['id']){
                     var user = userl[i];
@@ -76,6 +78,53 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
             }
             $scope.newUsers = userl;
         });
+
+        // // modify the posts to get correct posts for user
+        var Post = $resource('/api/posts');
+
+        Post.query(function(po){
+            $scope.temp = po;
+            var posts = []
+            for (var i = 0; i < $scope.temp.length; i++){
+                for(var l = 0; l < 1; l++){
+                    var added = false;
+                    if ( $scope.temp[i].author == localStorage['id']){
+                        posts.push($scope.temp[i]);
+                        added = true;
+                        break;
+                    } 
+                    for ( var j = 0; j < $scope.temp[i].mentions.length; j++){
+                        if ($scope.temp[i].mentions[j] == $scope.user.userName){
+                            posts.push($scope.temp[i]);
+                            added = true;
+                            break;
+                        }
+                    }
+                    if(added){
+                        break;
+                    }
+                    for(var k = 0; k < $scope.user.following.length; k++){
+                        if($scope.temp[i].author == $scope.user.following[k]){
+                            posts.push($scope.temp[i]);
+                            added = true;
+                            break
+                        }
+                    }
+                }
+            }
+            posts.sort(function(a,b){
+                a = new Date(a.date);
+                b = new Date(b.date);
+                return a>b ? 1 : a<b ? -1 : 0;
+            });
+            if ($scope.user.admin){
+                $scope.posts = $scope.temp;
+            } else {
+                $scope.posts = posts;
+            }
+            
+        });
+
 
         $scope.save = function(){
             console.log("creating new post");
@@ -224,6 +273,27 @@ app.controller('newFollowerCtrl', ['$scope', '$resource', '$location', '$routePa
         $scope.currentID = localStorage['id'];
         $scope.newID = $routeParams.id;
         
+        var Post = $resource('/api/posts');
+
+        Post.query(function(po){
+            $scope.temp = po;
+            var posts = []
+            for (var i = 0; i < $scope.temp.length; i++){
+                for(var l = 0; l < 1; l++){
+                    if ($scope.temp[i].author == $scope.newID){
+                        posts.push($scope.temp[i]);
+                        added = true;
+                    } 
+                }
+            }
+            posts.sort(function(a,b){
+                a = new Date(a.date);
+                b = new Date(b.date);
+                return a>b ? 1 : a<b ? -1 : 0;
+            });
+            $scope.posts = posts;
+        });
+
         var Chirp = $resource('/api/users/:id', { id: $scope.newID }, {
             update: { method: 'PUT' }
         });
@@ -235,11 +305,21 @@ app.controller('newFollowerCtrl', ['$scope', '$resource', '$location', '$routePa
 
         Chirp.get({ id: $scope.newID }, function(newUser){
             $scope.newUser = newUser;
-            
         });
+        setTimeout(function(){
+            $scope.newFollowPost = {
+                author: "ADMIN", 
+                content: $scope.user.name + " followed @" + $scope.newUser.name
+            }
+        }, 500)
+       
         $scope.save = function(){
+            
             Chirp.update($scope.user, function(){
                 $location.path('/home');
+            });
+            var P = $resource('/api/posts/:newFollow', {newFollow: $scope.currentID});
+                P.save($scope.newFollowPost, function(){
             });
         }
     }]

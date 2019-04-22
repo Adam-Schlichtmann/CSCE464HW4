@@ -5,3 +5,55 @@
 <input class="form-control" type="hidden" name="followers" id="followers"  ng-model="user.following">
 <input type="button" class="btn btn-primary" value="Follow" ng-click="save()"></input>
 <a class="btn btn-danger" href="/#/home">Cancel</a>	
+<h3>Recent Posts by {{newUser.name}}</h3>
+<div ng-repeat='post in posts'>
+    <div id="posts" align="center" >
+        <div id="post_content" class="row">
+            <div id="post_profile" style=" width:30px; float:left; border-right: black" >
+                <p>
+                    @{{post.author}}
+                </p>
+            </div>
+
+            <div id="post_content" class="column" style=" width:70%; height: 100px;" >
+            <div id="post_text" class="row" style=" padding-top: 20px; height:70%">
+                <p>
+                    {{post.content}}
+                </p> 
+            </div>
+            <div id="options" class="row" align="middle" style="margin:auto; padding-left: 30px; margin:auto; height:20px" >
+                <div id="reply" class="column" style="padding-right: 10px">
+                    <i class="glyphicon glyphicon-share-alt"></i>
+                </div>
+                <div id="favorite" class="column" style="padding-right: 10px">
+                    <input class="form-control" type="hidden" name="favorites" id="favorites"  ng-model="user.favorites">
+                    <button value="favorites" class="glyphicon glyphicon-heart" ng-click="favorite(post._id)">  
+                        <i >{{post.favorited}}</i> 
+                    </button>
+                </div>                             
+            </div>
+        </div>                
+    </div>                 
+</div>
+
+<style type="text/css">
+    .column {
+        float: left;
+    }
+    body {background-color: powderblue;}
+    /* Clear floats after the columns */
+    .row:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    
+    #posts {
+        border-radius: 25px;
+        border: 2px solid #000000;
+        padding-left: 20px;
+        margin:30px; 
+        width:800px;
+        height: 100px;
+    }
+    </style>

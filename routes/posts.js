@@ -13,10 +13,10 @@ router.get('/', function(req, res) {
     var collection = db.get('posts');
     collection.find({}, function(err, posts){
         if (err) throw err;
+
       	res.json(posts);
     });
 });
-
 
 router.get('/:id', function(req, res) {
     var collection = db.get('posts');
@@ -116,8 +116,8 @@ router.post('/:userID', function(req, res){
     });
 });
 
-router.post('/reply/:userID', function(req, res){
-    console.log("posting to database REPLY");
+
+router.post('/:newFollow', function(req, res){
     var collection = db.get('posts');
     var today = new Date();
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
@@ -126,6 +126,7 @@ router.post('/reply/:userID', function(req, res){
     var authorTemp = req.params.userID;
     var mentionsList = [];
     var post = req.body.content;
+
     for(var i = 0; i <post.length; i++){
         if(post[i] == '@'){
             var j = i;

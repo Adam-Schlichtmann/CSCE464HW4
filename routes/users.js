@@ -8,6 +8,7 @@ router.get('/', function(req, res) {
     var collection = db.get('users');
     collection.find({}, function(err, posts){
         if (err) throw err;
+        
       	res.json(posts);
     });
 });
