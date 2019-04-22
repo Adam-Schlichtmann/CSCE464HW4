@@ -40,6 +40,7 @@ app.config(['$routeProvider', function($routeProvider){
         });
 }]);
 
+
 app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', '$window',
     function($scope, $resource, $location, $routeParams, $window){
 
@@ -130,8 +131,9 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
             });
         };
 
-        $scope.save = function(){
-            console.log("creating new post");
+        $scope.saveReply = function(){
+            console.log("sending new reply to backend");
+            console.log($scope.newReply);
             var Chirp = $resource('/api/posts/reply/'+localStorage['id']);
             Chirp.save($scope.newReply, function(){
                 $location.path('/home');
@@ -139,10 +141,11 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
         };
 
         var modal = document.getElementById('replyBox');
-        var closeModal = document.getElementsByClassName("close")[0];
+        var deleteChirpModal = document.getElementById('deleteChirp');
         window.onclick = function(event) {
-            if (event.target == modal) {
+            if (event.target == modal ||event.target == deleteChirpModal) {
                 modal.style.display = "none";
+                deleteChirpModal.style.display="none";
             }
         }
 
@@ -159,14 +162,39 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
                 authorIDtemp = post.author
                 
             })
-            User.get({ id: authorIDtemp }, function(user){
-                $scope.replyPostAuthor = user.userName;
-                console.log(user.userName);
-            });
+            // User.get({ id: authorIDtemp }, function(user){
+            //     $scope.replyPostAuthor = user.userName;
+            //     console.log(user.userName);
+            // });
         }
 
         $scope.closeReplyBox = function(){
             var x = document.getElementById("replyBox");
+            x.style.display="none";
+        }
+
+        $scope.deleteChirpBox = function(deleteChirpID){
+            var x = document.getElementById("deleteChirp");
+            x.style.display="block";
+            var Chirp = $resource('/api/posts/:id');
+            Chirp.get({ id: deleteChirpID }, function(post){
+                $scope.deletePost = post;
+                console.log(post);
+            })
+        }
+
+        $scope.deleteChirp = function(deleteChirpID){
+            var x = document.getElementById("deleteChirp");
+            x.style.display="none";
+            var ChirpDelete = $resource('/api/posts/'+deleteChirpID);
+            ChirpDelete.delete({ id: deleteChirpID }, function(posts){
+                
+                $window.location.reload();
+            });
+        }
+
+        $scope.closeDeleteChirpBox = function(){
+            var x = document.getElementById("deleteChirp");
             x.style.display="none";
         }
 
