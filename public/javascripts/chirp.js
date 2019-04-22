@@ -80,10 +80,50 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
         $scope.save = function(){
             console.log("creating new post");
             var Chirp = $resource('/api/posts/'+localStorage['id']);
-            Chirp.save($scope.posts, function(){
+            Chirp.save($scope.newPost, function(){
                 $location.path('/home');
             });
         };
+
+        $scope.save = function(){
+            console.log("creating new post");
+            var Chirp = $resource('/api/posts/reply/'+localStorage['id']);
+            Chirp.save($scope.newReply, function(){
+                $location.path('/home');
+            });
+        };
+
+        var modal = document.getElementById('replyBox');
+        var closeModal = document.getElementsByClassName("close")[0];
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        $scope.showReplyBox = function(postID){
+            var x = document.getElementById("replyBox");
+            x.style.display="block";
+
+            console.log("post id is :" +postID);
+            var Chirp = $resource('/api/posts/:id');
+            var User = $resource('/api/users');
+            var authorIDtemp;
+            Chirp.get({ id: postID }, function(post){
+                $scope.replyPost = post;
+                authorIDtemp = post.author
+                
+            })
+            User.get({ id: authorIDtemp }, function(user){
+                $scope.replyPostAuthor = user.userName;
+                console.log(user.userName);
+            });
+        }
+
+        $scope.closeReplyBox = function(){
+            var x = document.getElementById("replyBox");
+            x.style.display="none";
+        }
 
         $scope.favorite = function(postID){
             $scope.currentID = localStorage['id'];
