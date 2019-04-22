@@ -46,11 +46,11 @@
 
                         <div id="post_content" class="column" style=" width:70%; height: 100px;" >
                             <div id="post_text" class="row" style=" padding-top: 20px; height:70%">
-                                <a ng-if="post.author == user._id" href="/#/chirp/{{post._id}}">
+                                <a ng-if="post.author == user._id || user.admin" href="/#/chirp/{{post._id}}">
                                     {{post.content}}
                                 </a>    
 
-                                <p ng-if="post.author != user._id">
+                                <p ng-if="post.author != user._id && !user.admin">
                                     {{post.content}}
                                 </p> 
                             </div>
@@ -67,7 +67,7 @@
                                 </div>    
                                    
                                 <div id="delete" class="column">
-                                    <a ng-if="post.author == user._id" href="/#/chirp/delete/{{post._id}}">
+                                    <a ng-if="post.author == user._id || user.admin" href="/#/chirp/delete/{{post._id}}">
                                         <i class="glyphicon glyphicon-remove"></i>
                                     </a>    
                                 </div>                            
