@@ -15,10 +15,6 @@ app.config(['$routeProvider', function($routeProvider){
             templateUrl: 'partials/home.html',
             controller: 'HomeCtrl'
         })
-        .when('/favorite/:id', {
-            templateUrl: 'partials/home.html',
-            controller: 'favoriteCtrl'
-        })
         .when('/add-chirp', {
             templateUrl: 'partials/post-form.html',
             controller: 'AddChirpCtrl'
@@ -35,22 +31,18 @@ app.config(['$routeProvider', function($routeProvider){
             templateUrl: 'partials/post-delete.html',
             controller: 'DeleteChirpCtrl'
         })
+        .when('/viewnotifications/:id', {
+            templateUrl: 'partials/home.html',
+            controller: 'notificationsCtrl'
+        })
         .otherwise({
             redirectTo: '/login'
         });
 }]);
 
-app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
-    function($scope, $resource, $location, $routeParams){
+app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', '$window',
+    function($scope, $resource, $location, $routeParams, $window){
 
-        // var Post = $resource('/api/posts');
-
-        // Post.query(function(po){
-        //     console.log(po);
-        //     $scope.posts = po;
-        // });
-
-        // gets three random users
         var User = $resource('/api/users');
         User.query( function(userl){
             $scope.allUsers = userl;
@@ -93,8 +85,8 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
                         added = true;
                         break;
                     } 
-                    for ( var j = 0; j < $scope.temp[i].mentions.length; j++){
-                        if ($scope.temp[i].mentions[j] == $scope.user.userName){
+                    for ( var j = 0; j < $scope.user.favorites.length; j++){
+                        if ($scope.user.favorites[j] == $scope.temp[i].id){
                             posts.push($scope.temp[i]);
                             added = true;
                             break;
@@ -112,11 +104,13 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
                     }
                 }
             }
+            // sort by date
             posts.sort(function(a,b){
                 a = new Date(a.date);
                 b = new Date(b.date);
-                return a>b ? 1 : a<b ? -1 : 0;
+                return a>b ? -1 : a<b ? 1 : 0;
             });
+            // check admin permissions
             if ($scope.user.admin){
                 $scope.posts = $scope.temp;
             } else {
@@ -126,11 +120,13 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
         });
 
 
-        $scope.save = function(){
+        $scope.newPost = function(){
             console.log("creating new post");
-            var Chirp = $resource('/api/posts/'+localStorage['id']);
-            Chirp.save($scope.newPost, function(){
-                $location.path('/home');
+            console.log($scope.newPost.content);
+            var n = {content: $scope.newPost.content};
+            var Chirp = $resource('/api/posts/' + localStorage['id']);
+            Chirp.save(n, function(){
+                $window.location.reload();
             });
         };
 
@@ -198,6 +194,110 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
                 });
             
                 Chirp.update($scope.user, function(){
+                    $window.location.reload();
+                });
+
+                
+            }, 250);
+        }
+
+    }]
+);
+
+
+app.controller('notificationsCtrl', ['$scope', '$resource', '$location', '$routeParams',
+    function($scope, $resource, $location, $routeParams){
+
+        // gets three random users
+        var User = $resource('/api/users');
+        User.query( function(userl){
+            $scope.allUsers = userl;
+            for (var i = 0; i < userl.length; i++){
+                if (userl[i]._id == localStorage['id']){
+                    var user = userl[i];
+                    $scope.profileName = user.userName;
+                    $scope.profileID= user._id;
+                    $scope.followers = user.following.length;
+                    $scope.favs = user.favorites;
+                    userl.splice(i,1);
+                }
+            }
+            $scope.user = user;
+            for (var j = 0; j < user.following.length; j++){
+                for (var k = 0; k < userl.length; k++){
+                    if (user.following[j] == userl[k]._id){
+                        userl.splice(k,1);
+                    }
+                }
+            }
+            while (userl.length > 3){
+                var x = Math.floor(Math.random() * userl.length);
+                userl.splice(x,1);
+            }
+            $scope.newUsers = userl;
+        });
+
+        // // modify the posts to get correct posts for user
+        var Post = $resource('/api/posts');
+
+        Post.query(function(po){
+            $scope.temp = po;
+            var posts = []
+            for (var i = 0; i < $scope.temp.length; i++){
+                for(var l = 0; l < 1; l++){
+                    for ( var j = 0; j < $scope.temp[i].mentions.length; j++){
+                        if ($scope.user.userName == $scope.temp[i].mentions[j]){
+                            posts.push($scope.temp[i]);
+                        }
+                    }
+                }
+            }
+            posts.sort(function(a,b){
+                a = new Date(a.date);
+                b = new Date(b.date);
+                return a>b ? -1 : a<b ? 1 : 0;
+            });
+            if ($scope.user.admin){
+                $scope.posts = $scope.temp;
+            } else {
+                $scope.posts = posts;
+            }
+            
+        });
+
+
+        $scope.save = function(){
+            console.log("creating new post");
+            var Chirp = $resource('/api/posts/'+localStorage['id']);
+            Chirp.save($scope.posts, function(){
+                $location.path('/home');
+            });
+        };
+
+        $scope.favorite = function(postID){
+            $scope.currentID = localStorage['id'];
+            console.log(postID);
+
+            var Poster = $resource('/api/posts/:id');
+            Poster.get({ id: postID }, function(post){
+                $scope.postToUpdate = post;
+            });
+            console.log($scope.postToUpdate);
+            var Post = $resource('/api/posts/addFav/:id', { id:  postID}, {
+                update: { method: 'PUT' }
+            });
+
+            // Has to wait so that the post can be gotten and passed in
+            setTimeout(function(){
+                Post.update($scope.postToUpdate, function(){
+                    
+                });
+    
+                var Chirp = $resource('/api/users/favorite/:id', { id:  postID}, {
+                    update: { method: 'PUT' }
+                });
+            
+                Chirp.update($scope.user, function(){
                     $location.path('/home');
                 });
 
@@ -212,6 +312,7 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
 
     }]
 );
+
 
 app.controller('registerCtrl', ['$scope', '$resource', '$location',
     function($scope, $resource, $location){
@@ -309,7 +410,7 @@ app.controller('newFollowerCtrl', ['$scope', '$resource', '$location', '$routePa
         setTimeout(function(){
             $scope.newFollowPost = {
                 author: "ADMIN", 
-                content: $scope.user.name + " followed @" + $scope.newUser.name
+                content: $scope.user.name + " followed @" + $scope.newUser.userName
             }
         }, 500)
        
@@ -324,31 +425,6 @@ app.controller('newFollowerCtrl', ['$scope', '$resource', '$location', '$routePa
         }
     }]
 );
-
-app.controller('favoriteCtrl', ['$scope', '$resource', '$location', '$routeParams',
-    function($scope, $resource, $location, $routeParams){
-        $scope.currentID = localStorage['id'];
-        
-        var Chirp = $resource('/api/users/favorite/:id', { id: $scope.currentID }, {
-            update: { method: 'PUT' }
-        });
-
-        var user = $resource('/api/users/:id', { id: $scope.currentID }, {
-            update: { method: 'PUT' }
-        });
-        user.get({ id: $scope.currentID }, function(user){
-            $scope.user = user;
-            
-        });
-
-       
-        Chirp.update($scope.user, function(){
-            $location.path('/home');
-        });
-        
-    }]
-);
-
 
 app.controller('DeleteChirpCtrl', ['$scope', '$resource', '$location', '$routeParams',
     function($scope, $resource, $location, $routeParams){

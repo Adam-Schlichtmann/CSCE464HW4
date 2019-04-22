@@ -98,8 +98,6 @@ router.post('/:userID', function(req, res){
 
         }
     }
-
-    console.log(req.params.userID);
    
     collection.insert({
         content: req.body.content,
