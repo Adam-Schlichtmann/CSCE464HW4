@@ -187,7 +187,7 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
             }
         }
 
-        $scope.showReplyBox = function(postID){
+        $scope.showReplyBox = function(postID,userName){
             var x = document.getElementById("replyBox");
             x.style.display="block";
             $scope.newReply.postID = postID;
@@ -197,7 +197,7 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
             var authorIDtemp;
             Chirp.get({ id: postID }, function(post){
                 $scope.replyPost = post;
-                authorIDtemp = post.author                
+                $scope.replyPost.userName = userName;            
             });
 
             var Chirp = $resource('/api/posts/replies/:id');
