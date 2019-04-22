@@ -134,8 +134,6 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
             }
             setTimeout(function(){
                 var tempP = $scope.tempPost;
-                console.log(tempP[2].author);
-                console.log($scope.allUsers);
                 for(var i = 0; i < tempP.length; i++){
                     for(var j = 0; j < $scope.allUsers.length; j++){
                         if (tempP[i].author == $scope.allUsers[j]._id){
@@ -174,23 +172,6 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
                 Chirp.save(n, function(){
                     $location.path('/home');
                 });
-                
-                console.log("incrementing post count");
-                
-                var temp;
-                var Poster = $resource('/api/posts/:id');
-                Poster.get({ id: $scope.newReply.postID }, function(post){
-                    temp = post;
-                });
-
-                var Post = $resource('/api/posts/addReply/:id', { id:  $scope.newReply.postID }, {
-                    update: { method: 'PUT' }
-                });
-                
-                Post.update(temp, function(){
-                    
-                });
-
             }, 250);
         };
 
