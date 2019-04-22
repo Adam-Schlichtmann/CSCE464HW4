@@ -18,18 +18,6 @@ router.get('/', function(req, res) {
     });
 });
 
-// get all users with specific author
-// router.get('/author/:id', function(req, res) {
-//     var collection = db.get('posts');
-//     console.log(req.params.id);
-//     collection.find({author: req.params.id}, function(err, post){
-//         if (err) throw err;
-
-//         res.json(post)
-//     });
-// });
-
-
 router.get('/:id', function(req, res) {
     var collection = db.get('posts');
     collection.findOne({ _id: req.params.id }, function(err, post){
@@ -153,10 +141,10 @@ router.post('/:newFollow', function(req, res){
     console.log(req.params.userID);
    
     collection.insert({
-        content: "asdfase",
+        content: req.body.content,
         replies: [],
         date: dateTime,
-        author: "asdf",
+        author: req.body.author,
         mentions: mentionsList,
         favorited: 0
     }, function(err, movie){
