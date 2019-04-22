@@ -20,9 +20,13 @@
             </div>                        
         </div>
         <div class="column" style="width:75%">
-            <p>
-                <a href="/#/add-chirp">New Post</a>
-            </p>
+            <form>
+                <div class="form-group" style="width: 800px">
+                    <label>Enter your new Chirp</label>     
+                    <input class="form-control" ng-model="posts.content" maxlength="144"></input>
+                </div>
+                <input type="button" class="btn btn-primary" value="Save" ng-click="save()"></input>    
+            </form>
                 <div ng-repeat='post in posts'>
                     <div id="posts" align="center" >
                         <div id="post_content" class="row">
@@ -33,25 +37,39 @@
                             </div>
                             <div id="post_text" style="margin:auto">
                                 <br>
+                    <div id="posts" align="middle" class="row">
+                        <div id="post_profile" class="column" style=" width:15%; height: 100px; border-right: 3px solid #000000" >
+                            <p style="padding-top: 20px">
+                                @{{post.author}}
+                            </p>
+                        </div>
+
+                        <div id="post_content" class="column" style=" width:70%; height: 100px;" >
+                            <div id="post_text" class="row" style=" padding-top: 20px; height:70%">
                                 <a href="/#/chirp/{{post._id}}">
                                     {{post.content}}
                                 </a>    
                             </div>
-                                
+                            <div id="options" class="row" align="middle" style="margin:auto; padding-left: 30px; margin:auto; height:20px" >
+                                <div id="reply" class="column" style="padding-right: 10px">
+                                    <i class="glyphicon glyphicon-share-alt"></i>
+                                </div>
+                                <div id="favorite" class="column" style="padding-right: 10px">
+                                    <input class="form-control" type="hidden" name="favorites" id="favorites"  ng-model="user.favorites">
+                                    <button value="favorites" class="glyphicon glyphicon-heart" ng-click="favorite(post._id)">  
+                                        <i >{{post.favorited}}</i> 
+                                    </button>
+                                    
+                                </div>    
+                                   
+                                <div id="delete" class="column">
+                                    <a href="/#/chirp/delete/{{post._id}}">
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </a>    
+                                </div>                            
+                            </div>
                         </div>
                         
-                        <div id="options" align="right" class="row">
-                            <div id="favorite" class="column">
-                                <input class="form-control" type="hidden" name="favorites" id="favorites"  ng-model="user.favorites">
-                                <button value="favorites" class="glyphicon glyphicon-heart" ng-click="favorite(post._id)">  
-                            </div>    
-                            <p>Likes: {{post.favorited}}</p>    
-                            <div id="delete" align="right">
-                                <a href="/#/chirp/delete/{{post._id}}">
-                                    <i class="glyphicon glyphicon-remove"></i>
-                                </a>    
-                            </div>                            
-                        </div>
                             
                     </div>                 
                 </div>
@@ -76,7 +94,9 @@ body {background-color: powderblue;}
 #posts {
   border-radius: 25px;
   border: 2px solid #000000;
-  padding: 20px;
+  padding-left: 20px;
   margin:30px; 
+  width:800px;
+  height: 100px;
 }
 </style>
