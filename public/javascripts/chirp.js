@@ -250,9 +250,8 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
 );
 
 
-app.controller('notificationsCtrl', ['$scope', '$resource', '$location', '$routeParams',
-    function($scope, $resource, $location, $routeParams){
-
+app.controller('notificationsCtrl', ['$scope', '$resource', '$location', '$routeParams', '$timeout',
+    function($scope, $resource, $location, $routeParams, $timeout){
         // gets three random users
         var User = $resource('/api/users');
         User.query( function(userl){
@@ -303,10 +302,26 @@ app.controller('notificationsCtrl', ['$scope', '$resource', '$location', '$route
                 return a>b ? -1 : a<b ? 1 : 0;
             });
             if ($scope.user.admin){
-                $scope.posts = $scope.temp;
+                $scope.tempPost = $scope.temp;
             } else {
-                $scope.posts = posts;
+                $scope.tempPost = posts;
             }
+
+            setTimeout(function(){
+                var tempP = $scope.tempPost;
+                console.log($scope.allUsers);
+                for(var i = 0; i < tempP.length; i++){
+                    for(var j = 0; j < $scope.allUsers.length; j++){
+                        if (tempP[i].author == $scope.allUsers[j]._id){
+                            tempP[i]['userName'] = $scope.allUsers[j].userName;
+                            break;
+                        }
+                    }
+                }
+                $scope.posts = tempP;
+                console.log($scope.posts)
+            }, 50);
+            $timeout(function() {}, 100);
             
         });
 
