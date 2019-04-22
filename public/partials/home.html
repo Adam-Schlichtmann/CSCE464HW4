@@ -50,28 +50,28 @@
                                 <a ng-if="post.author == user._id || user.admin" href="/#/chirp/{{post._id}}" style="word-break: break-all; word-wrap: break-word;">
                                     {{post.content}}
                                 </a>    
-
-                                <p ng-if="post.author != user._id && !user.admin">
-                                    {{post.content}}
-                                </p> 
-                            </div>
-                            <div id="options" class="row" align="middle" style="margin:auto; padding-left: 250px; height:20%" >
-                                <div id="reply" class="column" style="padding-right: 10px">
-                                    <button class="glyphicon glyphicon-share-alt" ng-click="showReplyBox(post._id)">
-                                        <i>{{post.replyCount}}</i>
-                                    </button>
+                                    <p ng-if="post.author != user._id && !user.admin">
+                                        {{post.content}}
+                                    </p> 
                                 </div>
-                                <div id="favorite" class="column" style="padding-right: 10px">
-                                    <input class="form-control" type="hidden" name="favorites" id="favorites"  ng-model="user.favorites">
-                                    <button value="favorites" class="glyphicon glyphicon-heart" ng-click="favorite(post._id)">  
-                                        <i >{{post.favorited}}</i> 
-                                    </button>
-                                </div>    
-                                <div id="delete" class="column">
-                                    <a ng-if="post.author == user._id || user.admin" ng-click="deleteChirpBox(post._id)" >
-                                        <i class="glyphicon glyphicon-remove"></i>
-                                    </a>    
-                                </div>                            
+                                <div id="options" class="row" align="middle" style="margin:auto; padding-left: 250px; height:20%" >
+                                    <div id="reply" class="column" style="padding-right: 10px">
+                                        <button class="glyphicon glyphicon-share-alt" ng-click="showReplyBox(post._id)">
+                                            <i>{{post.replies.length}}</i>
+                                        </button>
+                                    </div>
+                                    <div id="favorite" class="column" style="padding-right: 10px">
+                                        <input class="form-control" type="hidden" name="favorites" id="favorites"  ng-model="user.favorites">
+                                        <button value="favorites" class="glyphicon glyphicon-heart" ng-click="favorite(post._id)">  
+                                            <i >{{post.favorited}}</i> 
+                                        </button>
+                                    </div>    
+                                    <div id="delete" class="column">
+                                        <a ng-if="post.author == user._id || user.admin" ng-click="deleteChirpBox(post._id)" >
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </a>    
+                                    </div>         
+                                </div>                                                         
                             </div>
                         </div>
                     </div>                          
