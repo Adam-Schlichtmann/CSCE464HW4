@@ -85,7 +85,12 @@ router.post('/:userID', function(req, res){
     var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     var dateTime = date+' '+time;
-    var authorTemp = req.params.userID;
+    if (req.body.author == undefined){
+        var authorTemp = req.params.userID;
+    } else {
+        var authorTemp = req.body.author;
+    }
+    
     var mentionsList = [];
     var post = req.body.content;
     for(var i = 0; i <post.length; i++){

@@ -40,12 +40,10 @@ app.config(['$routeProvider', function($routeProvider){
         });
 }]);
 
-app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', '$window',
-    function($scope, $resource, $location, $routeParams, $window){
-
+app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', '$window', '$timeout',
+    function($scope, $resource, $location, $routeParams, $window, $timeout){
         var User = $resource('/api/users');
         User.query( function(userl){
-            $scope.allUsers = userl;
             for (var i = 0; i < userl.length; i++){
                 if (userl[i]._id == localStorage['id']){
                     var user = userl[i];
@@ -70,7 +68,7 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
             }
             $scope.newUsers = userl;
         });
-
+        
         // // modify the posts to get correct posts for user
         var Post = $resource('/api/posts');
 
@@ -104,19 +102,39 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
                     }
                 }
             }
+            User.query( function(allUsers){
+                $scope.allUsers = allUsers;
+            });
             // sort by date
             posts.sort(function(a,b){
                 a = new Date(a.date);
                 b = new Date(b.date);
                 return a>b ? -1 : a<b ? 1 : 0;
             });
+
             // check admin permissions
             if ($scope.user.admin){
-                $scope.posts = $scope.temp;
+                $scope.tempPost = $scope.temp;
             } else {
-                $scope.posts = posts;
+                $scope.tempPost = posts;
             }
-            
+            setTimeout(function(){
+                var tempP = $scope.tempPost;
+                console.log(tempP[2].author);
+                console.log($scope.allUsers);
+                for(var i = 0; i < tempP.length; i++){
+                    for(var j = 0; j < $scope.allUsers.length; j++){
+                        if (tempP[i].author == $scope.allUsers[j]._id){
+                            tempP[i]['userName'] = $scope.allUsers[j].userName;
+                            break;
+                        }
+                    }
+                }
+                $scope.posts = tempP;
+                console.log($scope.posts)
+            }, 50);
+            $timeout(function() {}, 100);
+           
         });
 
 
