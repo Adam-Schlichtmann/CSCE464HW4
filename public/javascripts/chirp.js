@@ -160,27 +160,33 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
 
         $scope.newReply = function(){
             console.log("sending new reply to backend");
-            console.log($scope.newReply.content);
-            console.log($scope.newReply.postID);
             var n = {
                         content: $scope.newReply.content
                     } 
             
             setTimeout(function(){
+                
                 var Chirp = $resource('/api/posts/reply/'+localStorage['id']+"/"+$scope.newReply.postID);
                 Chirp.save(n, function(){
                     $location.path('/home');
                 });
+                
                 console.log("incrementing post count");
+                
+                var temp;
+                var Poster = $resource('/api/posts/:id');
+                Poster.get({ id: $scope.newReply.postID }, function(post){
+                    temp = post;
+                });
+
                 var Post = $resource('/api/posts/addReply/:id', { id:  $scope.newReply.postID }, {
                     update: { method: 'PUT' }
                 });
-            
-                // Chirp.update($scope.user, function(){
-                //     $window.location.reload();
-                // });
-
                 
+                Post.update(temp, function(){
+                    
+                });
+
             }, 250);
         };
 
@@ -204,16 +210,13 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
             Chirp.get({ id: postID }, function(post){
                 $scope.replyPost = post;
                 authorIDtemp = post.author                
-            })
-            // User.get({ id: authorIDtemp }, function(user){
-            //     $scope.replyPostAuthor = user.userName;
-            //     console.log(user.userName);
-            // });
+            });
 
             var Chirp = $resource('/api/posts/replies/:id');
-            Chirp.get({ id: postID }, function(post){
+            Chirp.query({ id: postID }, function(posts){
                 $scope.replies = posts;
-            })
+
+            });
         }
 
         $scope.closeReplyBox = function(){
@@ -228,7 +231,7 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams', 
             var Chirp = $resource('/api/posts/:id');
             Chirp.get({ id: deleteChirpID }, function(post){
                 $scope.deletePost = post;
-            })
+            });
         }
 
         $scope.deleteChirp = function(deleteChirpID){

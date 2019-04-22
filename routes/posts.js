@@ -29,10 +29,10 @@ router.get('/:id', function(req, res) {
 
 router.get('/replies/:id', function(req, res) {
     var collection = db.get('posts');
-    collection.find({ replyHead: req.params.id }, function(err, post){
+    collection.find({ replyHead: req.params.id }, function(err, posts){
         if (err) throw err;
-        console.log(post);    
-        res.json(post);
+        console.log(posts);    
+        res.json(posts);
     });
 });
 
