@@ -118,7 +118,7 @@ app.controller('HomeCtrl', ['$scope', '$resource', '$location', '$routeParams',
                 b = new Date(b.date);
                 return a>b ? 1 : a<b ? -1 : 0;
             });
-            if (!$scope.user.admin){
+            if ($scope.user.admin){
                 $scope.posts = $scope.temp;
             } else {
                 $scope.posts = posts;
